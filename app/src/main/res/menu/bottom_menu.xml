@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/curiosity"
+        android:icon="@drawable/ic_home"
+        android:title="@string/curisosity" />
+    <item
+        android:id="@+id/oppurtunity"
+        android:title="@string/opportunity" />
+    <item
+        android:id="@+id/spirit"
+        android:title="@string/spirit" />
+</menu>

@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">NASA</string>
+    <!-- TODO: Remove or change this placeholder text -->
+
+    <string name="curisosity">Curiosity</string>
+    <string name="opportunity">Opportunity</string>
+    <string name="spirit">Spirit</string>
+    <string name="rhaz">RHAZ</string>
+    <string name="fhaz">FHAZ</string>
+    <string name="mast">MAST</string>
+    <string name="navcam">NAVCAM</string>
+    <string name="pancam">PANCAM</string>
+</resources>
