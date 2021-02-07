@@ -8,7 +8,6 @@ object NasaApiService {
     private val BASE_URL = "https://api.nasa.gov/mars-photos/api/v1/rovers/"
 
     val retrofit by lazy {
-
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())

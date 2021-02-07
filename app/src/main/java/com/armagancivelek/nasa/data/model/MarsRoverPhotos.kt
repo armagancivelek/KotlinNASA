@@ -1,11 +1,12 @@
 package com.armagancivelek.nasa.data.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 
 data class MarsRoverPhotos(
     @SerializedName("photos")
-    val photos: List<Photo?>?
+    val photos: MutableList<Photo>
 ) {
     data class Photo(
         @SerializedName("camera")
@@ -20,7 +21,7 @@ data class MarsRoverPhotos(
         val rover: Rover?,
         @SerializedName("sol")
         val sol: Int?
-    ) {
+    ) : Serializable {
         data class Camera(
             @SerializedName("full_name")
             val fullName: String?,

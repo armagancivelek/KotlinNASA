@@ -2,10 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:title="@string/navcam"
+        android:id="@+id/spirit_rhaz"
+        android:title="@string/rhaz"
         app:showAsAction="never" />
     <item
+        android:id="@+id/spirit_fhaz"
+        android:title="@string/fhaz"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/spirit_navcam"
+        android:title="@string/navcam"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/spirit_pancam"
         android:title="@string/pancam"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/spirit_minites"
+        android:title="@string/minites"
         app:showAsAction="never" />
 
 </menu>

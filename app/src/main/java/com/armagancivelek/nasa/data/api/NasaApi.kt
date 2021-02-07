@@ -9,24 +9,20 @@ interface NasaApi {
 
     @GET("curiosity/photos?sol=1000&api_key=DEMO_KEY")
     suspend fun getCuriosity(
-      @Query("page") page: Int,
-      @Query("camera") camera: String
-
-
+        @Query("page") page: Int,
+        @Query("camera") camera: String? = null
     ): MarsRoverPhotos
 
     @GET("spirit/photos?sol=1000&api_key=DEMO_KEY")
     suspend fun getSpirit(
-      @Query("page") page: Int,
-      @Query("camera") camera: String
-
+        @Query("page") page: Int,
+        @Query("camera") camera: String? = null
     ): MarsRoverPhotos
 
     @GET("opportunity/photos?sol=1000&api_key=DEMO_KEY")
     suspend fun getOpportunity(
-      @Query("page") page: Int,
-      @Query("camera") camera: String
-
+        @Query("page") page: Int,
+        @Query("camera") camera: String? = null
     ): MarsRoverPhotos
 
 

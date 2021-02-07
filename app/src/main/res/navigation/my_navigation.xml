@@ -9,15 +9,37 @@
         android:id="@+id/curiosity"
         android:name="com.armagancivelek.nasa.views.Curiosity"
         android:label="Curiosity"
-        tools:layout="@layout/fragment_curiosity" />
+        tools:layout="@layout/fragment_curiosity">
+        <action
+            android:id="@+id/action_curiosity_to_bottomSheetDialog"
+            app:destination="@id/bottomSheetDialog" />
+    </fragment>
     <fragment
         android:id="@+id/oppurtunity"
         android:name="com.armagancivelek.nasa.views.Oppurtunity"
         android:label="Opportunity"
-        tools:layout="@layout/fragment_oppurtunity" />
+        tools:layout="@layout/fragment_oppurtunity">
+        <action
+
+            android:id="@+id/action_oppurtunity_to_bottomSheetDialog"
+            app:destination="@id/bottomSheetDialog" />
+    </fragment>
     <fragment
         android:id="@+id/spirit"
         android:name="com.armagancivelek.nasa.views.Spirit"
         android:label="Spirit"
-        tools:layout="@layout/fragment_spirit" />
+        tools:layout="@layout/fragment_spirit">
+        <action
+            android:id="@+id/action_spirit_to_bottomSheetDialog"
+            app:destination="@id/bottomSheetDialog" />
+    </fragment>
+    <dialog
+        android:id="@+id/bottomSheetDialog"
+        android:name="com.armagancivelek.nasa.views.BottomSheetDialog"
+        android:label="fragment_bottom_sheet_dialog"
+        tools:layout="@layout/fragment_bottom_sheet_dialog">
+        <argument
+            android:name="photo"
+            app:argType="com.armagancivelek.nasa.data.model.MarsRoverPhotos$Photo" />
+    </dialog>
 </navigation>

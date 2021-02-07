@@ -2,12 +2,32 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/curiosity_rhaz"
         android:title="@string/rhaz"
         app:showAsAction="never" />
     <item
+        android:id="@+id/curiosity_fhaz"
         android:title="@string/fhaz"
         app:showAsAction="never" />
     <item
+        android:id="@+id/curiosity_mast"
         android:title="@string/mast"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/curiosity_chemcam"
+        android:title="@string/chemcam"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/curiosity_mahli"
+        android:title="@string/mahli"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/curiosity_mardi"
+        android:title="@string/mardi"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/curiosity_navcam"
+        android:title="@string/navcam"
+        app:showAsAction="never" />
+
 </menu>
