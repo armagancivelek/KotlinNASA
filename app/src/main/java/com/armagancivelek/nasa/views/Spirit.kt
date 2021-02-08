@@ -1,10 +1,11 @@
 package com.armagancivelek.nasa.views
 
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import android.widget.AbsListView
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,43 +13,28 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.armagancivelek.nasa.R
 import com.armagancivelek.nasa.data.model.MarsRoverPhotos
+import com.armagancivelek.nasa.databinding.FragmentSpiritBinding
 import com.armagancivelek.nasa.utils.CAMERAS
 import com.armagancivelek.nasa.utils.Constants
 import com.armagancivelek.nasa.utils.Rovers
 import com.armagancivelek.nasa.viewmodel.NasaViewModel
 import com.armagancivelek.nasa.views.adapter.NasaAdapter
-import kotlinx.android.synthetic.main.fragment_spirit.*
-
-class Spirit : Fragment() {
 
 
-    lateinit var v: View
+class Spirit : Fragment(R.layout.fragment_spirit) {
+
+
+    private lateinit var binding: FragmentSpiritBinding
     private val sharedViewModel: NasaViewModel by viewModels()
-    private lateinit var spiritRecycler: RecyclerView
     private val spiritAdapter = NasaAdapter(arrayListOf())
-    lateinit var spiritErrorText: TextView
-    lateinit var spiritProgress: ProgressBar
-
-
     private var isLoading = false
     private var isLastPage = false
     private var isScrolling = false
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        avedInstanceState: Bundle?
-
-
-    ): View? {
-        v = inflater.inflate(R.layout.fragment_spirit, container, false)
-
-        return v
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        init()
+        init(view)
         observeLiveData()
         eventHandler()
 
@@ -57,7 +43,7 @@ class Spirit : Fragment() {
 
 
     private fun eventHandler() {
-        spiritRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.spiritRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     isScrolling = true
@@ -111,11 +97,11 @@ class Spirit : Fragment() {
 
         sharedViewModel.photos.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             it?.let {
-                spiritRecycler.visibility = View.VISIBLE
+                binding.spiritTvEror.visibility = View.VISIBLE
                 spiritAdapter.updatePhotos(it as List<MarsRoverPhotos.Photo>)
             }
             if (it.size == 0) {
-                spiritErrorText.run {
+                binding.spiritTvEror.run {
                     text = "Bu kameraya ait görüntü yok"
                     visibility = View.VISIBLE
                 }
@@ -127,12 +113,12 @@ class Spirit : Fragment() {
             it?.let {
 
                 if (it) {
-                    spiritErrorText.run {
+                    binding.spiritTvEror.run {
                         text = "Bağlantınızı kontrol edin "
                         visibility = View.VISIBLE
                     }
                 } else {
-                    spiritErrorText.visibility = View.INVISIBLE
+                    binding.spiritTvEror.visibility = View.INVISIBLE
                 }
             }
         })
@@ -140,9 +126,9 @@ class Spirit : Fragment() {
 
             it?.let {
                 if (it) {
-                    spirit_progress_bar.visibility = View.VISIBLE
+                    binding.spiritProgressBar.visibility = View.VISIBLE
                 } else
-                    spirit_progress_bar.visibility = View.INVISIBLE
+                    binding.spiritProgressBar.visibility = View.INVISIBLE
             }
 
         })
@@ -150,11 +136,10 @@ class Spirit : Fragment() {
 
     }
 
-    fun init() {
-        spiritProgress = v.findViewById(R.id.spirit_progress_bar)
-        spiritErrorText = v.findViewById(R.id.spirit_tv_eror)
+    fun init(view: View) {
 
-        spiritRecycler = v.findViewById<RecyclerView>(R.id.spirit_recycler).apply {
+        binding = FragmentSpiritBinding.bind(view)
+        binding.spiritRecycler.apply {
             layoutManager = LinearLayoutManager(context)
             this.adapter = spiritAdapter
             sharedViewModel.refreshData(Rovers.spirit)//  first time fetching data
@@ -188,8 +173,6 @@ class Spirit : Fragment() {
 
 
         }
-
-
 
 
         return true

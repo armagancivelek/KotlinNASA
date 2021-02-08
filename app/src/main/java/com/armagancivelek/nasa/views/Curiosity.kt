@@ -1,10 +1,11 @@
 package com.armagancivelek.nasa.views
 
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import android.widget.AbsListView
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,24 +13,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.armagancivelek.nasa.R
 import com.armagancivelek.nasa.data.model.MarsRoverPhotos
+import com.armagancivelek.nasa.databinding.FragmentCuriosityBinding
 import com.armagancivelek.nasa.utils.CAMERAS
 import com.armagancivelek.nasa.utils.Constants
 import com.armagancivelek.nasa.utils.Rovers
 import com.armagancivelek.nasa.viewmodel.NasaViewModel
 import com.armagancivelek.nasa.views.adapter.NasaAdapter
-import kotlinx.android.synthetic.main.fragment_curiosity.*
 
 
 @Suppress("UNCHECKED_CAST")
-class Curiosity : Fragment() {
+class Curiosity : Fragment(R.layout.fragment_curiosity) {
 
-    lateinit var v: View
+    private lateinit var binding: FragmentCuriosityBinding
     private val sharedViewModel: NasaViewModel by viewModels()
-    private lateinit var curiosityRecycler: RecyclerView
     private val curiosityAdapter = NasaAdapter(arrayListOf())
-    lateinit var curiosityErrorText: TextView
-    lateinit var curiosityProgress: ProgressBar
-
 
 
     private var isLoading = false
@@ -37,29 +34,16 @@ class Curiosity : Fragment() {
     private var isScrolling = false
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        avedInstanceState: Bundle?
-
-
-    ): View? {
-        v = inflater.inflate(R.layout.fragment_curiosity, container, false)
-
-        return v
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        init()
+        init(view)
         observeLiveData()
         eventHandler()
 
-
     }
 
-
     private fun eventHandler() {
-        curiosityRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.curiosityRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     isScrolling = true
@@ -113,11 +97,11 @@ class Curiosity : Fragment() {
 
         sharedViewModel.photos.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             it?.let {
-                curiosityRecycler.visibility = View.VISIBLE
+                binding.curiosityRecycler.visibility = View.VISIBLE
                 curiosityAdapter.updatePhotos(it as List<MarsRoverPhotos.Photo>)
             }
             if (it.size == 0) {
-                curiosityErrorText.run {
+                binding.curiosityTvEror.run {
                     text = "Bu kameraya ait görüntü yok"
                     visibility = View.VISIBLE
                 }
@@ -129,12 +113,12 @@ class Curiosity : Fragment() {
             it?.let {
 
                 if (it) {
-                    curiosityErrorText.run {
+                    binding.curiosityTvEror.run {
                         text = "Bu kameraya ait görüntü yok"
                         visibility = View.VISIBLE
                     }
                 } else {
-                    curiosityErrorText.visibility = View.INVISIBLE
+                    binding.curiosityTvEror.visibility = View.INVISIBLE
                 }
             }
         })
@@ -142,9 +126,9 @@ class Curiosity : Fragment() {
 
             it?.let {
                 if (it) {
-                    curiosity_progress_bar.visibility = View.VISIBLE
+                    binding.curiosityProgressBar.visibility = View.VISIBLE
                 } else
-                    curiosity_progress_bar.visibility = View.INVISIBLE
+                    binding.curiosityProgressBar.visibility = View.INVISIBLE
             }
 
         })
@@ -152,22 +136,15 @@ class Curiosity : Fragment() {
 
     }
 
-    fun init() {
-
+    fun init(view: View) {
+        binding = FragmentCuriosityBinding.bind(view)
         setHasOptionsMenu(true)
-        curiosityProgress = v.findViewById(R.id.curiosity_progress_bar)
-        curiosityErrorText = v.findViewById(R.id.curiosity_tv_eror)
-
-        curiosityRecycler = v.findViewById<RecyclerView>(R.id.curiosity_recycler).apply {
+        binding.curiosityRecycler.apply {
             layoutManager = LinearLayoutManager(context)
             this.adapter = curiosityAdapter
             sharedViewModel.refreshData(Rovers.curiosity)//  first time fetching data
 
         }
-
-
-
-
 
 
     }

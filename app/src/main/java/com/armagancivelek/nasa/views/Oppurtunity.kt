@@ -1,10 +1,11 @@
 package com.armagancivelek.nasa.views
 
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import android.widget.AbsListView
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,37 +13,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.armagancivelek.nasa.R
 import com.armagancivelek.nasa.data.model.MarsRoverPhotos
+import com.armagancivelek.nasa.databinding.FragmentOppurtunityBinding
 import com.armagancivelek.nasa.utils.CAMERAS
 import com.armagancivelek.nasa.utils.Constants
 import com.armagancivelek.nasa.utils.Rovers
 import com.armagancivelek.nasa.viewmodel.NasaViewModel
 import com.armagancivelek.nasa.views.adapter.NasaAdapter
 
-class Oppurtunity : Fragment() {
+class Oppurtunity : Fragment(R.layout.fragment_oppurtunity) {
 
-    lateinit var v: View
+    private lateinit var binding: FragmentOppurtunityBinding
     private val sharedViewModel: NasaViewModel by viewModels()
-    private lateinit var opportunityRecycler: RecyclerView
     private val opportunityAdapter = NasaAdapter(arrayListOf())
-    lateinit var opportunityErrorText: TextView
-    lateinit var opportunityProgress: ProgressBar
-
     private var isLoading = false
     private var isLastPage = false
     private var isScrolling = false
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        v = inflater.inflate(R.layout.fragment_oppurtunity, container, false)
-
-        return v
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        init()
+        init(view)
         observeLiveData()
         eventHandler()
 
@@ -70,12 +59,11 @@ class Oppurtunity : Fragment() {
         return true
     }
 
-    fun init() {
-        setHasOptionsMenu(true)
-        opportunityProgress = v.findViewById(R.id.opportunity_progress_bar)
-        opportunityErrorText = v.findViewById(R.id.opportunity_tv_eror)
+    fun init(view: View) {
 
-        opportunityRecycler = v.findViewById<RecyclerView>(R.id.opportunity_recycler).apply {
+        binding = FragmentOppurtunityBinding.bind(view)
+        setHasOptionsMenu(true)
+        binding.opportunityRecycler.apply {
             layoutManager = LinearLayoutManager(context)
             this.adapter = opportunityAdapter
             sharedViewModel.refreshData(Rovers.opportunity)//  first time fetching data
@@ -90,11 +78,11 @@ class Oppurtunity : Fragment() {
 
         sharedViewModel.photos.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             it?.let {
-                opportunityRecycler.visibility = View.VISIBLE
+                binding.opportunityRecycler.visibility = View.VISIBLE
                 opportunityAdapter.updatePhotos(it as List<MarsRoverPhotos.Photo>)
             }
             if (it.size == 0) {
-                opportunityErrorText.run {
+                binding.opportunityTvEror.run {
                     text = "Bu kameraya ait görüntü yok"
                     visibility = View.VISIBLE
                 }
@@ -106,12 +94,12 @@ class Oppurtunity : Fragment() {
             it?.let {
 
                 if (it) {
-                    opportunityErrorText.run {
+                    binding.opportunityTvEror.run {
                         text = "Bağlantınızı kontrol edin "
                         visibility = View.VISIBLE
                     }
                 } else {
-                    opportunityErrorText.visibility = View.INVISIBLE
+                    binding.opportunityTvEror.visibility = View.INVISIBLE
                 }
             }
         })
@@ -119,9 +107,9 @@ class Oppurtunity : Fragment() {
 
             it?.let {
                 if (it) {
-                    opportunityProgress.visibility = View.VISIBLE
+                    binding.opportunityProgressBar.visibility = View.VISIBLE
                 } else
-                    opportunityProgress.visibility = View.INVISIBLE
+                    binding.opportunityProgressBar.visibility = View.INVISIBLE
             }
 
         })
@@ -130,7 +118,7 @@ class Oppurtunity : Fragment() {
     }
 
     private fun eventHandler() {
-        opportunityRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.opportunityRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     isScrolling = true
