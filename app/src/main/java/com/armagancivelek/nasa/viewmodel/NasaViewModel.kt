@@ -21,18 +21,19 @@ class NasaViewModel(application: Application) : BaseViewModel(application) {
     }
 
     fun getData(rover: Rovers, camera: String? = null) {
+        loading.value = true
         launch {
             try {
                 if (camera != null) {
                     currentResponse?.clear()
                     pageNumber = 1
                 }
-                loading.postValue(true)
+
 
                 val response = repository.getPhotos(rover, pageNumber, camera)
                 response.let {
                     pageNumber++
-                    if (currentResponse == null) {
+                    if (currentResponse == null || currentResponse?.size == 0) {
                         currentResponse = response.photos
                     } else {
                         currentResponse!!.addAll(response.photos)

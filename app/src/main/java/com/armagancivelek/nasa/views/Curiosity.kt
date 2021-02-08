@@ -62,10 +62,7 @@ class Curiosity : Fragment(R.layout.fragment_curiosity) {
                 val isNotAtBeginnig = firstVisibleItemPosition >= 0
                 val isTotalMoreThanVisible = totalItemCount >= Constants.QUERY_PAGE_SIZE
                 val shouldPaginate = isNotLoadingAndNotLastPage && isLastItem && isNotAtBeginnig &&
-                        isScrolling &&
-
-
-                        isTotalMoreThanVisible
+                        isScrolling && isTotalMoreThanVisible
 
                 if (shouldPaginate) {
                     sharedViewModel.getData(Rovers.curiosity)
@@ -97,7 +94,7 @@ class Curiosity : Fragment(R.layout.fragment_curiosity) {
 
         sharedViewModel.photos.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             it?.let {
-                binding.curiosityRecycler.visibility = View.VISIBLE
+
                 curiosityAdapter.updatePhotos(it as List<MarsRoverPhotos.Photo>)
             }
             if (it.size == 0) {
@@ -127,12 +124,13 @@ class Curiosity : Fragment(R.layout.fragment_curiosity) {
             it?.let {
                 if (it) {
                     binding.curiosityProgressBar.visibility = View.VISIBLE
+                    isLoading = true
                 } else
-                    binding.curiosityProgressBar.visibility = View.INVISIBLE
+                    isLoading = false
+                binding.curiosityProgressBar.visibility = View.INVISIBLE
             }
 
         })
-
 
     }
 
@@ -143,12 +141,8 @@ class Curiosity : Fragment(R.layout.fragment_curiosity) {
             layoutManager = LinearLayoutManager(context)
             this.adapter = curiosityAdapter
             sharedViewModel.refreshData(Rovers.curiosity)//  first time fetching data
-
         }
-
-
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.crusitory_menu, menu)
@@ -170,12 +164,7 @@ class Curiosity : Fragment(R.layout.fragment_curiosity) {
                 sharedViewModel.refreshData(Rovers.curiosity, CAMERAS.MARDI.name)
             R.id.curiosity_navcam ->
                 sharedViewModel.refreshData(Rovers.curiosity, CAMERAS.NAVCAM.name)
-
         }
-
-
-
-
         return true
     }
 
